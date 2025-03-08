@@ -1,0 +1,15 @@
+#Fix for raspberry pi to keep trying to restart nut-driver until it succeeds
+[Unit]
+Description=Network UPS Tools - power device driver controller
+After=local-fs.target network.target systemd-udev-settle.service
+Wants=systemd-udev-settle.service
+StopWhenUnneeded=yes
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+ExecStartPre=/bin/sleep 60
+ExecStart=/sbin/upsdrvctl start
+ExecStop=/sbin/upsdrvctl stop
+Type=forking
+Restart=on-failure
