@@ -1,2 +1,2 @@
 #!/bin/bash
-mosquitto_pub -h 10.0.80.10 -p 1883 -t "power/$UPSNAME/notify" -m "\"type\":\"$NOTIFYTYPE\",\"message\":\"$1\"" -u nut -P {{mqtt_nut_password}} -q 1 -r
+mosquitto_pub -h 10.0.80.10 -p 1883 -t "power/$UPSNAME/notify" -m "\"type\":\"$NOTIFYTYPE\",\"message\":\"$1\"}" -u nut -P {{mqtt_nut_password}} -q 1 -r
