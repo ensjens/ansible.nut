@@ -56,6 +56,6 @@
   template:
     src: "nutnotifymqtt.sh.j2"
     dest: "{{ nut_config_path }}/mqttnotify/nutnotifymqtt.sh"
-    mode: '0644'
+    mode: '0770'
     owner: "{{nut_user}}"
     group: "{{nut_user}}"
