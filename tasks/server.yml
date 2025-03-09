@@ -4,6 +4,13 @@
     name={{nut_server_package}}
     state=latest
 
+- name: Install dependencies
+  apt:
+    name:
+      - mosquitto-clients
+    state: present
+  become: true
+
 - name: configure ups.conf
   template: >
     src=ups.conf.j2
@@ -44,3 +51,11 @@
     owner=root
   notify:
     - restart nut-driver
+
+- name: Copy nutnotifymqtt.sh file
+  ansible.builtin.copy:
+    src: "nutnotifymqtt.sh"
+    dest: "{{ nut_config_path }}/mqttnotify/nutnotifymqtt.sh"
+    mode: '0644'
+    owner: "{{nut_user}}"
+    group: "{{nut_user}}"
