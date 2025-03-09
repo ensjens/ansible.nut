@@ -53,8 +53,8 @@
     - restart nut-driver
 
 - name: Copy nutnotifymqtt.sh file
-  ansible.builtin.copy:
-    src: "nutnotifymqtt.sh"
+  template:
+    src: "nutnotifymqtt.sh.j2"
     dest: "{{ nut_config_path }}/mqttnotify/nutnotifymqtt.sh"
     mode: '0644'
     owner: "{{nut_user}}"
