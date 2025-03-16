@@ -11,6 +11,16 @@
     state: present
   become: true
 
+- name: Ensure paths exists
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: 0700
+    owner: "root"
+    group: "{{ nut_user }}"
+  with_items:
+    - {path: "{{ nut_config_path }}/mqttnotify", when: true}
+
 - name: configure ups.conf
   template: >
     src=ups.conf.j2
