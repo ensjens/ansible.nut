@@ -1,0 +1,51 @@
+#! /bin/sh
+#
+# This script should be called by upssched via the CMDSCRIPT directive.
+# 
+# Here is a quick example to show how to handle a bunch of possible
+# timer names with the help of the case structure.
+#
+# This script may be replaced with another program without harm.
+#
+# The first argument passed to your CMDSCRIPT is the name of the timer
+# from your AT lines.
+
+case $1 in
+    upsOnline)
+        mqttTopic="power/$UPSNAME/notify"
+        mqttMessage="$UPSNAME online"
+        ;;
+    upsOnBatt)
+        mqttTopic="power/$UPSNAME/notify"
+        mqttMessage="$UPSNAME on battery"
+        ;;
+    upsLowBatt)
+        mqttTopic="power/$UPSNAME/notify"
+        mqttMessage="$UPSNAME low battery"
+        ;;
+    fsd)
+        mqttTopic="power/$UPSNAME/notify"
+        mqttMessage="$UPSNAME forced shutdown"
+        ;;
+    shutdown)
+        mqttTopic="power/$UPSNAME/notify"
+        mqttMessage="$UPSNAME shutdown"
+        ;;
+    commOk)
+        mqttTopic="power/$UPSNAME/comms"
+        mqttMessage="$UPSNAME comms OK"
+        ;;
+    commBad)
+        mqttTopic="power/$UPSNAME/comms"
+        mqttMessage="$UPSNAME comms bad"
+        ;;
+    replbatt)
+        mqttTopic="power/$UPSNAME/battery"
+        mqttMessage="$UPSNAME replace battery"
+        ;;
+	*)
+		logger -t upssched-cmd "Unrecognized command: $1"
+		;;
+esac
+
+mosquitto_pub -h 10.0.80.10 -p 1883 -t "$mqttTopic" -m "{\"type\":\"$NOTIFYTYPE\",\"message\":\"$mqttMessage\"}" -u nut -P {{mqtt_nut_password}} -q 1 -r

@@ -20,6 +20,7 @@
     group: "{{ nut_user }}"
   with_items:
     - {path: "{{ nut_config_path }}/mqttnotify", when: true}
+    - {path: "{{ nut_config_path }}/upssched", when: true}
 
 - name: configure ups.conf
   template: >
@@ -66,6 +67,26 @@
   template:
     src: "nutnotifymqtt.sh.j2"
     dest: "{{ nut_config_path }}/mqttnotify/nutnotifymqtt.sh"
+    mode: '0750'
+    owner: "root"
+    group: "{{nut_user}}"
+
+# Copy upssched.conf file
+- name: Copy upssched.conf file
+  template:
+    src: "upssched.conf.j2"
+    dest: "{{ nut_config_path }}/upssched.conf"
+    mode: '0640'
+    owner: "root"
+    group: "{{nut_user}}"
+  notify:
+    - restart nut-monitor
+
+# Copy upssched-cmd file
+- name: Copy upssched-cmd file
+  template:
+    src: "upssched-cmd.j2"
+    dest: "{{ nut_config_path }}/upssched-cmd"
     mode: '0750'
     owner: "root"
     group: "{{nut_user}}"
